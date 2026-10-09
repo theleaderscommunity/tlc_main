@@ -1,30 +1,45 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
+// test/widget_test.dart
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:tlc_main/main.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tlc_main/main.dart'; // Ensure this matches your package path to TlcMainApp
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
-
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  // Ensure shared preferences is mocked correctly for testing environment routing
+  setUp(() {
+    SharedPreferences.setMockInitialValues({'completed_onboarding': false});
   });
+
+  testWidgets(
+    'App structural lifecycle test: Splash to Onboarding flow verification',
+    (WidgetTester tester) async {
+      // 1. Boot up the real entrypoint wrapped in Riverpod scope
+      await tester.pumpWidget(const ProviderScope(child: TlcMainApp()));
+
+      // 2. VERIFY SPLASH IDENTITY STAGE:
+      // Assert that the initial logo tagline text elements render on start
+      expect(find.text('Wear Your Purpose'), findsOneWidget);
+      expect(find.text('T L C'), findsOneWidget);
+
+      // 3. TRIGGER SIMULATED ASSET TIMEOUT:
+      // Your splash screen waits 3 seconds before routing. We advance time by 3 seconds.
+      await tester.pump(const Duration(seconds: 3));
+
+      // Settle transitions and routing animation frames smoothly
+      await tester.pumpAndSettle();
+
+      // 4. VERIFY ONBOARDING CAROUSEL MODULE STAGE:
+      // Assert that the app successfully routed past splash to your first Purushartha pillar
+      expect(find.text('DHARMA'), findsOneWidget);
+      expect(find.text('NEXT'), findsOneWidget);
+
+      // 5. NAVIGATE THROUGH CAROUSEL:
+      // Tap next to move from Dharma to Artha
+      await tester.tap(find.text('NEXT'));
+      await tester.pumpAndSettle();
+
+      // Assert that the view has updated state context gracefully to Artha pillar
+      expect(find.text('ARTHA'), findsOneWidget);
+    },
+  );
 }
