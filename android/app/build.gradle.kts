@@ -24,7 +24,7 @@ dependencies {
   // https://firebase.google.com/docs/android/setup#available-libraries
 }
 // 💡 FIX 1: Modern AGP 9.0+ block declaration syntax
-configure<com.android.build.api.dsl.ApplicationExtension> {
+android {
     namespace = "com.theleaderscommunity.tlc_main"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
@@ -50,9 +50,7 @@ configure<com.android.build.api.dsl.ApplicationExtension> {
     }
 
     buildTypes {
-        getByName(release) {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+        release {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
@@ -74,13 +72,6 @@ configure<com.android.build.api.dsl.ApplicationExtension> {
         }
     }
 
-}
-
-// 💡 FIX 2: Migrated deprecated kotlinOptions {} to modern global compiler options extension
-kotlin {
-    compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_17)
-    }
 }
 
 flutter {
