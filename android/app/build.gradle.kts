@@ -1,29 +1,17 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     id("com.android.application")
-    id("kotlin-android")
-
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+   
     id("dev.flutter.flutter-gradle-plugin")
-
-     // Add the Google services Gradle plugin
-  id("com.google.gms.google-services")
-
+    id("com.google.gms.google-services")
 }
 
 dependencies {
-  // Import the Firebase BoM
-  implementation(platform("com.google.firebase:firebase-bom:35.0.0"))
-
-
-  // TODO: Add the dependencies for Firebase products you want to use
-  // When using the BoM, don't specify versions in Firebase dependencies
-  implementation("com.google.firebase:firebase-analytics")
-
-
-  // Add the dependencies for any other desired Firebase products
-  // https://firebase.google.com/docs/android/setup#available-libraries
+    implementation(platform("com.google.firebase:firebase-bom:35.0.0"))
+    implementation("com.google.firebase:firebase-analytics")
 }
-// 💡 FIX 1: Modern AGP 9.0+ block declaration syntax
+
 android {
     namespace = "com.theleaderscommunity.tlc_main"
     compileSdk = flutter.compileSdkVersion
@@ -34,15 +22,8 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.theleaderscommunity.tlc_main"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
@@ -50,20 +31,17 @@ android {
     }
 
     buildTypes {
-        release {
+        getByName("release") {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // 🎛️ MULTI-ENVIRONMENT FLAVOR DIMENSIONS
-    // ──────────────────────────────────────────────────────────────────────────
     flavorDimensions.add("default")
 
     productFlavors {
         create("staging") {
             dimension = "default"
-            applicationIdSuffix = ".staging" // Dynamic ID separation
+            applicationIdSuffix = ".staging"
             manifestPlaceholders["appName"] = "TLC Staging"
         }
         create("prod") {
@@ -71,7 +49,12 @@ android {
             manifestPlaceholders["appName"] = "Tlc"
         }
     }
+}
 
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
+    }
 }
 
 flutter {
