@@ -1,0 +1,63 @@
+name: Multi-Environment Branch Deployment Pipeline
+on:
+    push:
+        branches:
+            - main
+            - staging
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout source code
+              uses: actions/checkout@v4
+
+            - name: Set up JAVA JDK Environment
+              uses: actions/setup-java@v4
+              with:
+                distribution: 'temurin'
+                java-version: '17'
+
+            - name: Set up Flutter SDK Environment
+              uses: subosito/flutter-action@v2
+              with:
+                channel: 'stable'
+
+            - name: Install Project Packages
+              run: flutter pub get
+
+            # Staging Pipeline Execution
+            - name: Inject Staging Config Maps
+              if: github.ref == 'refs/heads/staging'
+              run: cp android/app/firebase_configs/staging/google-services.json android/app/google-services.json
+
+            - name: Build Android Staging Profile
+              if: github.ref == 'refs/heads/staging'
+              run: flutter build apk --release --flavor staging -t lib/main.dart
+
+            - name: Deliver Staging App to Testers
+              if: github.ref == 'refs/heads/staging'
+              uses: wzieba/Firebase-Distribution-Github-Action@v1
+              with:
+                appId: ${{ secrets.FIREBASE_APP_ID_STAGING }}
+                serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_CREDENTIALS_STAGING }}
+                groups: testers
+                file: build/app/outputs/flutter-apk/app-staging-release.apk
+
+            # Production Pipeline Execution
+            - name: Inject Production Config Maps
+              if: github.ref == 'refs/heads/main'
+              run: cp android/app/firebase_configs/prod/google-services.json android/app/google-services.json
+
+            - name: Build Android Production Profile
+              if: github.ref == 'refs/heads/main'
+              run: flutter build apk --release --flavor prod -t lib/main.dart
+
+            - name: Deliver Production App to Testers
+              if: github.ref == 'refs/heads/main'
+              uses: wzieba/Firebase-Distribution-Github-Action@v1
+              with:
+                appId: ${{ secrets.FIREBASE_APP_ID_PROD }}
+                serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_CREDENTIALS_PROD }}
+                groups: testers
+                file: build/app/outputs/flutter-apk/app-prod-release.apk

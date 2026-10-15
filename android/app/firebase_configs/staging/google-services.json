@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "639480657984",
+    "project_id": "tlc-main-staging",
+    "storage_bucket": "tlc-main-staging.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:639480657984:android:ce9188a974fb25248dc7a5",
+        "android_client_info": {
+          "package_name": "com.theleaderscommunity.tlc_main.staging"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMBotT9VYbLTaRQIK7aI4rpvjCdiyrLvc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,7 @@
 // lib/features/dashboard/navigation_shell.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tlc_main/screens/shop_screen.dart';
 import '../../core/constants/colors.dart';
 import 'dashboard_provider.dart';
 
@@ -13,7 +14,7 @@ class NavigationShell extends ConsumerWidget {
     final notifier = ref.read(dashboardProvider.notifier);
 
     final List<Widget> screens = [
-      const Center(child: Text('🛒 Shop Space (WordPress API Integration)')),
+      ShopScreen(),
       const Center(child: Text('👜 Shopping Cart Module')),
       const Center(child: Text('👤 User Profile Profile Setup')),
       state.hasMemberId

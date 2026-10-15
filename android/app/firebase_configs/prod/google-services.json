@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1053540128966",
+    "project_id": "tlc-main-prod",
+    "storage_bucket": "tlc-main-prod.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1053540128966:android:d721bc82d14f4a68da9fc7",
+        "android_client_info": {
+          "package_name": "com.theleaderscommunity.tlc_main"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjjP4HzhvnyeMdzQZAAoGYYZpoc_sLFDA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
