@@ -33,8 +33,8 @@ jobs:
 
             - name: Build Android Staging Profile
               if: github.ref == 'refs/heads/staging'
-              run: flutter build apk --release --flavor staging -t lib/main.dart \ --android-skip-build-dependency-validation \
-                --build-name=1.0.0 \ --build-number=1
+              run: flutter build apk --release --flavor staging -t lib/main.dart --android-skip-build-dependency-validation
+               
 
             - name: Deliver Staging App to Testers
               if: github.ref == 'refs/heads/staging'
@@ -52,8 +52,8 @@ jobs:
 
             - name: Build Android Production Profile
               if: github.ref == 'refs/heads/main'
-              run: flutter build apk --release --flavor prod -t lib/main.dart \ --android-skip-build-dependency-validation \
-                --build-name=1.0.0 \ --build-number=1
+              run: flutter build apk --release --flavor prod -t lib/main.dart --android-skip-build-dependency-validation
+                
 
             - name: Deliver Production App to Testers
               if: github.ref == 'refs/heads/main'
